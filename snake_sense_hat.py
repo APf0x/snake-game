@@ -199,11 +199,11 @@ while True:
                         retryFlag = True
                         break
 
-        # update matrix:
+        
         sensehat.clear()
         sensehat.set_pixel(foodPosX, foodPosY, RED)
         for x, y in zip(snakePosX, snakePosY):
             sensehat.set_pixel(x, y, GREEN)
 
-        # snake speed (game loop delay):
+        
         time.sleep(snakeMovementDelay)
