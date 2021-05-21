@@ -91,10 +91,10 @@ VAI_INDIETRO_QUANDO_SEI_SUL_BORDO = 8
 while True:
     # metto delle variabili importanti in caso lo dimenticassi
     gameOverFlag = False
-    growSnakeFlag = False
-    generateRandomFoodFlag = False
-    snakeMovementDelay = 0.5
-    snakeMovementDelayDecrease = -0.02
+    snakeisbigger = False
+    generatefood = False
+    delay = 0.5
+    delaydecrease = -0.02
 
     # qui comincia quel count down e richiamo la variabile images che ora fa un bell efetto
     for img in images:
@@ -102,14 +102,14 @@ while True:
         time.sleep(UNA_PAUSA)
 
     # una posizione default per il serpente forse dovrei smettere di sctivere tuttu questi commenti
-    posx = [3]
-    posy = [6]
+    posX = [3]
+    posY = [6]
 
     # questa parte serve per mettere in posizioni random il cibo o pallini rossi 
     while True:
-        foodPosX = random.randint(0, 7)
-        foodPosY = random.randint(0, 7)
-        if foodPosX != posx[0] or foodPosY != posy[0]:
+        foodX = random.randint(0, 7)
+        foodY = random.randint(0, 7)
+        if foodX != posX[0] or foodY != posY[0]:
             break
 
     # questo come la posizione default e la direzione in cui si dirige default anche se non mi piace questa 
@@ -123,16 +123,17 @@ while True:
     # comunque questo e il loop del gioco
     while not gameOverFlag:
         # questo è un piccolo ceck se mangia ste palline o no
-        if foodPosX == posx[0] and foodPosY == posy[0]:
-            growSnakeFlag = True
-            generateRandomFoodFlag = True
-            snakeMovementDelay += snakeMovementDelayDecrease
+        if foodX == posX[0] and foodY == posY[0]:
+            snakeisbigger = True
+            generatefood = True
+            #questa parte diminuiscie il delay ogni volta che mangia qualcosa
+            delay += delaydecrease
 
         # questo serve a capire se ti mangi da solo perche scrivo sti commenti tanto me lo ricordo va be
         #forse passo al inglese bho non so nemmeno se funziona
         #update sta roba non so perche ma funziona e non ho intenzione di toccarla se funziona funziona
-        for i in range(1, len(posx)):
-            if posx[i] == posx[0] and posy[i] == posy[0]:
+        for i in range(1, len(posX)):
+            if posX[i] == posX[0] and posY[i] == posY[0]:
                 gameOverFlag = True
 
         # proff non mi amazzi dovevo mettere questo break come faccievo mettevo un or nell while dell inizio del loop
@@ -163,47 +164,47 @@ while True:
                 
 
         # quanto il serpente mangia qualcosa diventa piu grande giusto  ecco questa è la funzione di questa parte del codice
-        if growSnakeFlag:
-            growSnakeFlag = False
-            posx.append(0)
-            posy.append(0)
+        if snakeisbigger:
+            snakeisbigger = False
+            posX.append(0)
+            posY.append(0)
 
         # questo è il continuo movimento del serpente mi ci è voluto un po per capire sto len
-        for i in range((len(posx) - 1), 0, -1):
-            posx[i] = posx[i - 1]
-            posy[i] = posy[i - 1]
+        for i in range((len(posX) - 1), 0, -1):
+            posX[i] = posX[i - 1]
+            posY[i] = posY[i - 1]
 
-        posx[0] += x
-        posy[0] += y
+        posX[0] += x
+        posY[0] += y
 
         # qui mette i bordi della mappa quindi se vai a un limite ti fa ritornare indietro
-        if posx[0] > UN_PO_PIU_PRIMA_DEL_BORDO:
-            posx[0] -= VAI_INDIETRO_QUANDO_SEI_SUL_BORDO
-        elif posx[0] < UN_PO_PIU_PRIMA_DEL_BORDO_A_DESTRA:
-            posx[0] += VAI_INDIETRO_QUANDO_SEI_SUL_BORDO
-        if posy[0] > UN_PO_PIU_PRIMA_DEL_BORDO:
-            posy[0] -= VAI_INDIETRO_QUANDO_SEI_SUL_BORDO
-        elif posy[0] < UN_PO_PIU_PRIMA_DEL_BORDO_A_DESTRA:
-            posy[0] += VAI_INDIETRO_QUANDO_SEI_SUL_BORDO
+        if posX[0] > UN_PO_PIU_PRIMA_DEL_BORDO:
+            posX[0] -= VAI_INDIETRO_QUANDO_SEI_SUL_BORDO
+        elif posX[0] < UN_PO_PIU_PRIMA_DEL_BORDO_A_DESTRA:
+            posX[0] += VAI_INDIETRO_QUANDO_SEI_SUL_BORDO
+        if posY[0] > UN_PO_PIU_PRIMA_DEL_BORDO:
+            posY[0] -= VAI_INDIETRO_QUANDO_SEI_SUL_BORDO
+        elif posY[0] < UN_PO_PIU_PRIMA_DEL_BORDO_A_DESTRA:
+            posY[0] += VAI_INDIETRO_QUANDO_SEI_SUL_BORDO
 
         # questo serve a far spawnare cibo in posizioni random
-        if generateRandomFoodFlag:
-            generateRandomFoodFlag = False
+        if generatefood:
+            generatefood = False
             retryFlag = True
             while retryFlag:
-                foodPosX = random.randint(0, 7)
-                foodPosY = random.randint(0, 7)
+                foodX = random.randint(0, 7)
+                foodY = random.randint(0, 7)
                 retryFlag = False
-                for x, y in zip(posx, posy):
-                    if x == foodPosX and y == foodPosY:
+                for x, y in zip(posX, posY):
+                    if x == foodX and y == foodY:
                         retryFlag = True
                         break
 
         # update matrix:
         sense.clear()
-        sense.set_pixel(foodPosX, foodPosY, RED)
-        for x, y in zip(posx, posy):
+        sense.set_pixel(foodX, foodY, RED)
+        for x, y in zip(posX, posY):
             sense.set_pixel(x, y, GREEN)
 
         # snake speed (game loop delay):
-        time.sleep(snakeMovementDelay)
+        time.sleep(delay)
