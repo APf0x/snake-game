@@ -1,4 +1,5 @@
 
+
 from sense_hat import SenseHat
 import time
 import random
@@ -11,21 +12,6 @@ RED = (255, 0, 0)
 WHITE = (255, 255, 255)
 NO_LED = (0, 0, 0)
 
-#dark and dark
-def dark_and_dark():
-    P = nothing
-    O = nothing
-    logo = [
-    O, O, O, O, O, O, O, O, 
-    O, P, P, O, P, P, O, O,
-    P, P, P, P, P, P, P, O,
-    P, P, P, P, P, P, P, O,
-    O, P, P, P, P, P, O, O,
-    O, O, P, P, P, O, O, O,
-    O, O, O, P, O, O, O, O,
-    O, O, O, O, O, O, O, O,
-    ]
-    return logo
 
 #qui metto un count down per dopo che una partita viene finita
 def five_img():
@@ -144,6 +130,7 @@ while True:
             snakegrow = True
             randomfood = True
             movementdelay += movementdecrease
+              
 
         # questo serve a capire se ti mangi da solo perche scrivo sti commenti tanto me lo ricordo va be
         #forse passo al inglese bho non so nemmeno se funziona
@@ -179,28 +166,14 @@ while True:
                 movementX = 0
                 
 
-        # update matrix:
-        rgb1 = random.randrange(0, 256)
-        rgb2 = random.randrange(0, 256)
-        rgb3 = random.randrange(0, 256)
-        sense.clear()
-        sense.set_pixel(foodPosX, foodPosY, RED)
-        if snakegrow:
-            for x, y in zip(snakePosX, snakePosY):
-                sense.set_pixel(x, y, RED)
-        else:
-            for x, y in zip(snakePosX, snakePosY):
-                sense.set_pixel(x, y, rgb1, rgb2, rgb3)
+
         
         
         
         # quanto il serpente mangia qualcosa diventa piu grande giusto  ecco questa è la funzione di questa parte del codice
         
-        
-        if snakegrow:
-            snakegrow = False
-            snakePosX.append(0)
-            snakePosY.append(0)
+        # ho cambiato un po tutto e ho spostato il codice non riesco piu a trovarla ^^
+
 
         # questo è il continuo movimento del serpente mi ci è voluto un po per capire sto len
         for i in range((len(snakePosX) - 1), 0, -1):
@@ -233,8 +206,36 @@ while True:
                         retryFlag = True
                         break
 
-        
+        # update matrix:
+        rgb1 = random.randrange(0, 256)
+        rgb2 = random.randrange(0, 256)
+        rgb3 = random.randrange(0, 256)
+        sense.clear()
+        sense.set_pixel(foodPosX, foodPosY, RED)
+        if snakegrow:
+            for x, y in zip(snakePosX, snakePosY):
+                sense.set_pixel(x, y, RED)
+        else:
+            for x, y in zip(snakePosX, snakePosY):
+                sense.set_pixel(x, y, rgb1, rgb2, rgb3)
+
+        # quanto il serpente mangia qualcosa diventa piu grande giusto  ecco questa è la funzione di questa parte del codice      
+        if snakegrow:
+            snakegrow = False
+            snakePosX.append(0)
+            snakePosY.append(0)
             
+        # questo serve a capire se ti mangi da solo perche scrivo sti commenti tanto me lo ricordo va be
+        #forse passo al inglese bho non so nemmeno se funziona
+        #update sta roba non so perche ma funziona e non ho intenzione di toccarla se funziona funziona
+        for i in range(1, len(snakePosX)):
+            if snakePosX[i] == snakePosX[0] and snakePosY[i] == snakePosY[0]:
+                gameover = True
+
+        # proff non mi amazzi dovevo mettere questo break come faccievo mettevo un or nell while dell inizio del loop
+        # serve per capire se sono morto o meno
+        if gameover:
+            break
         
 
         # snake speed (game loop delay):
